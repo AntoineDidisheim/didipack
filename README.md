@@ -8,6 +8,8 @@ pip install didipack
 ## latex table
 The first functionality concerns latex tables. The demo_latex.py file contains an illustration/tutorial on these functions. 
 
+After running the demo_latex.py file, you can compile the tex_example/main.tex file to see the example.
+
 ## parameters
 This function is here to create a basis for the parameters class of the whole project. 
 
