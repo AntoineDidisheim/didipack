@@ -123,6 +123,7 @@ class TableReg:
         self.final_show_list = []
         self.show_only_list = []
         self.col_groups = []
+        self.rename_dict = {}
         if 'hide_list' in option:
             assert type(option['hide_list']) == list, "The overall hide list has to be a list"
             self.hide_list = option['hide_list']
@@ -132,12 +133,21 @@ class TableReg:
             self.show_only_list = option['show_only_list']
 
         if 'order' in option:
-            print(option['order'])
             assert type(option['order']) == list, "The order has to be a list"
             self.order = option['order']
 
         if 'col_groups' in option:
             self.set_col_groups(option['col_groups'])
+
+        if 'rename_dict' in option:
+            self.set_rename_dict(option['rename_dict'])
+
+
+    def set_rename_dict(self, rename_dict):
+        assert type(rename_dict) == dict, "The rename dict must be a dictionary"
+        self.rename_dict = rename_dict
+
+
 
     def set_col_groups(self, groups):
         assert type(groups) == list, "The col order has to be a list of list"
@@ -146,9 +156,9 @@ class TableReg:
         self.col_groups = groups
 
 
-    def add_reg(self, reg, show_list=[], hide_list=[], blocks=[]):
+    def add_reg(self, reg, show_list=[], hide_list=[], blocks=[],bottom_blocks=[]):
         hide_list = hide_list + self.hide_list
-        self.reg_list.append(OneReg(reg, show_list, hide_list, blocks))
+        self.reg_list.append(OneReg(reg, show_list, hide_list, blocks, bottom_blocks))
 
     def update_show_list(self):
         if len(self.show_only_list) == 0:
@@ -167,7 +177,10 @@ class TableReg:
         self.df = pd.concat(col,1)
 
         self.df.columns = [r'\parboxc{c}{0.6cm}{('+str(int(i+1))+')}' for i in range(self.df.shape[1])]
+        self.df = self.df.rename(index=self.rename_dict)
+
         self.final_show_list = show_list
+        self.final_show_list = pd.Series(self.final_show_list).replace(self.rename_dict).values.tolist()
         self.tex=''
 
     def create_tex(self):
@@ -220,7 +233,7 @@ class TableReg:
 
         self.tex = tex.replace(t,TableReg.group_skip+ r'\\')
 
-    def save_tex(self, save_dir='tex_example/table.tex'):
+    def save_tex(self, save_dir):
 
         self.create_tex()
         tex = self.tex
@@ -233,7 +246,7 @@ class TableReg:
             txt.write(tex)
 
     @staticmethod
-    def create_panel_of_tables(table_list, name_list, save_dir='tex_example/table.tex'):
+    def create_panel_of_tables(table_list, name_list, save_dir):
         numbers = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split()
         title_list = []
         for i in range(len(table_list)):
