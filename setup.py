@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'didipack',
   packages = ['didipack'],
-  version = '0.1',
+  version = '0.1.1',
   license='MIT',
   description = 'Usfull time saver for data-science and finance with python',
   author = 'Antoine Didisheim',
   author_email = 'antoinedidisheim@gmail.com',
   url = 'https://github.com/AntoineDidisheim',
-  download_url = 'https://github.com/AntoineDidisheim/didipack/archive/v01.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/AntoineDidisheim/didipack/archive/v0.1.1.tar.gz',    # I explain this later on
   keywords = ['LaTex', 'Finance'],
   install_requires=[            # I get to this in a second
           'numpy',

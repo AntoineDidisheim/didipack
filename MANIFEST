@@ -3,3 +3,4 @@ setup.cfg
 setup.py
 didipack/__init__.py
 didipack/latex_table.py
+didipack/parameters.py
