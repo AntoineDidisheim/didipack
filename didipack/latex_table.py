@@ -104,7 +104,7 @@ class OneReg:
 
 class TableReg:
     missing_symbol = ' '
-    par_value = ParValue.TSTAT
+    par_value = ParValue.STD
     round = 4
     round_r2 = 4
     sign_tr = [0.1, 0.05, 0.01]
@@ -231,7 +231,10 @@ class TableReg:
                 t = item
         # replacing specific rule
 
-        self.tex = tex.replace(t,TableReg.group_skip+ r'\\')
+        if t is not None:
+            self.tex = tex.replace(t, TableReg.group_skip + r'\\')
+        else:
+            self.tex = tex
 
     def save_tex(self, save_dir):
 

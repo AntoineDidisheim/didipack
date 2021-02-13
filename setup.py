@@ -2,9 +2,9 @@ from distutils.core import setup
 setup(
   name = 'didipack',
   packages = ['didipack'],
-  version = '0.1.1',
+  version = '1.0.1',
   license='MIT',
-  description = 'Usfull time saver for data-science and finance with python',
+  description = 'Usefull time saver for data-science and finance with python',
   author = 'Antoine Didisheim',
   author_email = 'antoinedidisheim@gmail.com',
   url = 'https://github.com/AntoineDidisheim',
@@ -13,7 +13,8 @@ setup(
   install_requires=[            # I get to this in a second
           'numpy',
           'pandas',
-          'statsmodels'
+          'statsmodels',
+          'matplotlib'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',
