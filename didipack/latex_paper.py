@@ -63,7 +63,7 @@ class LatexPaper:
             txt.write(didipack.TexRessources.m_tex_4 + "bib")
             txt.write(didipack.TexRessources.m_tex_5)
 
-    def append_table_to_sec(self, table_name, sec_name, caption='caption',overall_caption=None, resize=-1):
+    def append_table_to_sec(self, table_name, sec_name, caption='caption',overall_caption=None,sub_dir=None, resize=-1):
         table_name = table_name.replace('.tex', '')
         sec_name = sec_name.replace('.tex', '')
         if overall_caption is None:
@@ -77,7 +77,12 @@ class LatexPaper:
             t2 = '}\n \\input{tables/'
             t3 = '.tex} \n\\end{table}' + '\n'
 
-        f = t0 + caption + t1 + overall_caption + t2 + table_name + t3
+        if sub_dir is None:
+            final_name = table_name
+        else:
+            final_name = sub_dir+'/'+table_name
+
+        f = t0 + caption + t1 + overall_caption + t2 + final_name + t3
 
         with open(f'{self.dir_sec + sec_name}.tex', 'a') as txt:
             txt.write(f)
@@ -88,7 +93,7 @@ class LatexPaper:
     fig_labels = ['a', 'b'];
     fig_type_default = '.png'
 
-    def append_fig_to_sec(self, fig_names, sec_name, main_caption='CAPTION', size=None, fig_captions=[], fig_type=None,overall_label=None):
+    def append_fig_to_sec(self, fig_names, sec_name, main_caption='CAPTION', size=None, fig_captions=[], fig_type=None,overall_label=None, sub_dir = None):
         if fig_type is None:
             fig_type = self.fig_type_default
 
@@ -119,7 +124,11 @@ class LatexPaper:
                 cap = fig_captions[i]
             else:
                 cap = ''
-            name = fig_names[i]
+            if sub_dir is None:
+                name = fig_names[i]
+            else:
+                name = sub_dir +'/' + fig_names[i]
+
             t2 += r"\subfigure[" + cap + r"]{\label{fig:" + overall_label + "_" + let + r"}\includegraphics[width=" + size + r"]{figs/" + name + fig_type + r"}}" + '\n'
         t3 = r"\caption{" + main_caption + r"}" + '\n' +r"\label{fig:" + overall_label + r"}" +'\n'+ r"\end{figure}" + '\n'
         f = t1 + t2 + t3
