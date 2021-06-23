@@ -63,12 +63,12 @@ class LatexPaper:
             txt.write(didipack.TexRessources.m_tex_4 + "bib")
             txt.write(didipack.TexRessources.m_tex_5)
 
-    def append_table_to_sec(self, table_name, sec_name, caption='caption',overall_caption=None,sub_dir=None, resize=-1):
+    def append_table_to_sec(self, table_name, sec_name, caption='caption',overall_caption=None,sub_dir=None, resize=-1,position='b'):
         table_name = table_name.replace('.tex', '')
         sec_name = sec_name.replace('.tex', '')
         if overall_caption is None:
             overall_caption = table_name
-        t0 = "\n"+ '\\begin{table}[H] \n \\centering \n \\caption{'
+        t0 = "\n"+ '\\begin{table}['+position+'!] \n \\centering \n \\caption{'
         t1 = '}\n\\label{table:'
         if resize > 0:
             t2 = f'}}\n \\resizebox{{{resize}\\textwidth}}{{!}}{{\\input{{tables/'
@@ -93,7 +93,7 @@ class LatexPaper:
     fig_labels = ['a', 'b'];
     fig_type_default = '.png'
 
-    def append_fig_to_sec(self, fig_names, sec_name, main_caption='CAPTION', size=None, fig_captions=[], fig_type=None,overall_label=None, sub_dir = None):
+    def append_fig_to_sec(self, fig_names, sec_name, main_caption='CAPTION', size=None, fig_captions=[], fig_type=None,overall_label=None, sub_dir = None, position = 't'):
         if fig_type is None:
             fig_type = self.fig_type_default
 
@@ -114,8 +114,10 @@ class LatexPaper:
                 size = r"0.45\linewidth"
             if len(fig_names) in [3, 6, 9]:
                 size = r"0.3\linewidth"
+            if size is None:
+                size = r"0.45\linewidth"
 
-        t1 = "\n"+r"\begin{figure}[t!] " + '\n' + "\centering"
+        t1 = "\n"+rf"\begin{{figure}}[{position}!] " + '\n' + "\centering"
         t2 = ''
         for i in range(len(fig_names)):
             let = "abcdefghijklmnopqrstuvwxyz"[i]
