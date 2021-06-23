@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
   name = 'didipack',
   packages = ['didipack'],
-  version = '2.2.3',
+  version = '3.2.2',
   license='MIT',
   setup_requires=['wheel'],
   description = 'Usefull time saver for data-science and finance with python',
