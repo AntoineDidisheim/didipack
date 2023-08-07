@@ -1,13 +1,9 @@
 import setuptools
 
-
-
-
 setuptools.setup(
     name='didipack',
     packages=setuptools.find_packages(),  # Automatically discover and include all packages in the package directory
-    setup_requires = ['setuptools_scm'], # this and next line: automatically set up the  version
-    use_scm_version=True,
+    version='4.0.0',
     license='MIT',
     setup_requires=['wheel'],
     description='Usefull time saver for data-science and finance with python',
