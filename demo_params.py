@@ -30,7 +30,7 @@ class ParamsModelB:
         self.missing_params = 'nope'
 
 # now create the main Params class which inherit didi.ParamsBasis
-class Params(didi.ParamsBasis):
+class Params(didi.Params):
     def __init__(self):
 
         self.name_detail = ''

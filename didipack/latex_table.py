@@ -54,7 +54,6 @@ class OneReg:
                     p = p+t
                 if v_l[1] < p_l[1]:
                     v = v+t
-
                 # else:
                     # p = r'\phantom{(}' + p + r'\phantom{)}'
                 d[k] = p
@@ -62,12 +61,13 @@ class OneReg:
                 t = pd.Series(dtype=object)
                 t[''] =v
 
-                d = d.append(t)
+                d = pd.concat([d,t],axis=0)
+                
             else:
                 t = pd.Series(dtype=object)
                 t[k] = TableReg.missing_symbol
                 t[''] = TableReg.missing_symbol
-                d = d.append(t)
+                d = pd.concat([d,t],axis=0)
         # now we can add the "blocks", that is fix effects and others
         for block in self.blocks:
             t = pd.Series(dtype=object)
@@ -75,7 +75,7 @@ class OneReg:
 
             for k in block.keys():
                 t[k] = block[k]
-            d = d.append(t)
+            d = pd.concat([d,t],axis=0)
 
         # finaly additional info (r² and n.obs per default, but you can add anything through bottom blocks
         if TableReg.show_obs | TableReg.show_r2 | (len(self.bottom_block)>0):
@@ -98,7 +98,7 @@ class OneReg:
                 t = pd.Series(dtype=object)
                 for k in block.keys():
                     t[k] = block[k]
-            d = d.append(t)
+            d = pd.concat([d,t],axis=0)
         return d
 
 
@@ -174,7 +174,8 @@ class TableReg:
         for oneReg in self.reg_list:
             oneReg.show_list = show_list
             col.append(oneReg.create_columns())
-        self.df = pd.concat(col,1)
+
+        self.df = pd.concat(col,axis=1)
 
         self.df.columns = [r'\parboxc{c}{0.6cm}{('+str(int(i+1))+')}' for i in range(self.df.shape[1])]
         self.df = self.df.rename(index=self.rename_dict)
@@ -218,7 +219,8 @@ class TableReg:
         L+=1
         for i in range(1,len(self.final_show_list)):
             a = self.final_show_list[i]
-            a += ' '*(L-len(a))+'&'
+            # a += ' '*(L-len(a))+'&'
+            a += ' &'
             ts = tex.split(a)
             temp = ts[0][:-4] + TableReg.variable_skip + ts[0][-4:]
             tex=temp+a+ts[1]

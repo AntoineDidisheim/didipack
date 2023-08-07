@@ -3,12 +3,41 @@ import itertools
 import pandas as pd
 import os
 
+
+class RandomFeaturesParams:
+    def __init__(self):
+        self.max_rf = 50*1000
+        self.gamma_list = [0.5,0.6,0.7,0.8,0.9,1.0]
+        self.block_size_for_generation=1000
+        self.start_seed=0
+        self.voc_grid=[100, 200, 360, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000]
+        self.para_nb_of_list_group=20
+        self.para_id=0
+
+
+class TrainerParams:
+    def __init__(self):
+        self.T_train = 360
+        self.T_val = 36
+        self.testing_window = 1
+        self.shrinkage_list = np.linspace(1e-12,10,50)
+        self.save_ins = False
+
+        # this is the number of individual saving chunks.
+        # by this we mean the number of individual df contianing some oos performance that will be saved before merged.
+        # too big and we risk loosing some processing, too small and we will make a mess of the merging process.
+        self.nb_chunks = 25
+        #
+        self.min_nb_chunks_in_cluster = 10
+
 # store all parameters into a single object
-class ParamsBasis:
+class Params:
     def __init__(self):
         self.name_detail = ''
         self.name = ''
         self.seed = 12345
+        self.train = TrainerParams()
+        self.rf = RandomFeaturesParams()
 
         self.update_model_name()
 
@@ -58,7 +87,7 @@ class ParamsBasis:
 
             except:
                 temp = pd.DataFrame(data=[key, v], index=['key', 'value']).T
-                df = df.append(temp)
+                df = pd.concat([df,temp],axis=0)
         df.to_pickle(save_dir + file_name)
 
     def load(self, load_dir, file_name='/parameters.p'):
