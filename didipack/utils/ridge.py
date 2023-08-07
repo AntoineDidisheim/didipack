@@ -1,4 +1,4 @@
-from utils.smart_algebra import smart_eigenvalue_decomposition_covariance
+from didipack.utils.smart_algebra import smart_eigenvalue_decomposition_covariance
 import numpy as np
 
 def run_efficient_ridge(

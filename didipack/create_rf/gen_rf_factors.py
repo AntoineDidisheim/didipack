@@ -1,13 +1,4 @@
 import tqdm
-
-try:  # ugly trick so that we can run python Experience1/run_voc.py and in the main Pycharm system
-    import sys
-    import pathlib
-
-    sys.path.append(str(pathlib.Path(__file__).parent.resolve()).replace('risk_return_tradeoff', ''))
-except:
-    print("debug on pycharm -i python")
-
 from RandomFeaturesGenerator import RandomFeaturesGenerator
 import os
 import sys

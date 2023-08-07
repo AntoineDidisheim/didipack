@@ -1,6 +1,6 @@
-import numpy as np
 import time
-import pandas as pd
+import numpy as np
+
 
 class TicToc:  # simple class to measure the time of various part of the code
     def __init__(self):

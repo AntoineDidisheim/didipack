@@ -1,12 +1,7 @@
 import sys
-from data import Data
-from parameters import *
 import pandas as pd
-import re
-from matplotlib import pyplot as plt
-from typing import Tuple
-from trainer.trainer_abstract import BaseTrainer
-from utils.ridge import run_efficient_ridge
+from didipack.trainer.trainer_abstract import BaseTrainer
+from didipack.utils.ridge import run_efficient_ridge
 import numpy as np
 from didipack import Params
 

@@ -1,22 +1,5 @@
-import tqdm
-
-try:  # ugly trick so that we can run python Experience1/run_voc.py and in the main Pycharm system
-    import sys
-    import pathlib
-
-    sys.path.append(str(pathlib.Path(__file__).parent.resolve()).replace('risk_return_tradeoff', ''))
-except:
-    print("debug on pycharm -i python")
-
-from RandomFeaturesGenerator import RandomFeaturesGenerator
-
 import os
-import sys
 import pandas as pd
-import pickle
-import numpy as np
-from aux import TicToc, get_block_sizes
-
 
 JKP_signals = ['cowc_gr1a', 'oaccruals_at', 'oaccruals_ni', 'taccruals_at', 'taccruals_ni',
                'capex_abn', 'debt_gr3', 'fnl_gr1a', 'ncol_gr1a', 'nfna_gr1a', 'noa_at',

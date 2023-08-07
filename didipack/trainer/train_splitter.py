@@ -6,8 +6,8 @@ import tqdm
 from didipack.parameters import *
 from matplotlib import pyplot as plt
 from typing import Tuple, List
-from utils.general import smart_chunks
-from trainer.trainer_ridge import TrainerRidge
+from didipack.utils.general import smart_chunks
+from didipack.trainer.trainer_ridge import TrainerRidge
 
 
 def generate_fake_data(N: int = 1000, P: int = 100) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
