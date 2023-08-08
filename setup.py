@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name='didipack',
     packages=setuptools.find_packages(),  # Automatically discover and include all packages in the package directory
-    version='4.0.3',
+    version='4.0.4',
     license='MIT',
     setup_requires=['wheel'],
     description='Usefull time saver for data-science and finance with python',
@@ -37,7 +37,3 @@ setuptools.setup(
     # },
 )
 
-
-'''
-T_train 
-'''
