@@ -11,6 +11,22 @@ class PandasPlus:
         total_mem_usage_gb = total_mem_usage_bytes / 1024 ** 3
         return total_mem_usage_gb
 
+    @staticmethod
+    def winzorize_series(s, p=5):
+        """
+        Winzorizes a pandas Series by p percent on both sides of the distribution.
+
+        Parameters:
+        - s: The pandas Series to winzorize.
+        - p: The percentage to winzorize on both sides. Defaults to 5%.
+
+        Returns:
+        - The winzorized Series.
+        """
+        lower = s.quantile(p / 100)
+        upper = s.quantile(1 - p / 100)
+
+        return s.clip(lower=lower, upper=upper)
 
     @staticmethod
     def get_ym(s:pd.Series):

@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 from didipack.trainer.trainer_abstract import BaseTrainer
-from didipack.utils.ridge import run_efficient_ridge
+from didipack.utils_didi.ridge import run_efficient_ridge
 import numpy as np
 from didipack import Params
 

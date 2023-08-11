@@ -6,7 +6,7 @@ import tqdm
 from didipack.parameters import *
 from matplotlib import pyplot as plt
 from typing import Tuple, List
-from didipack.utils.general import smart_chunks
+from didipack.utils_didi.general import smart_chunks
 from didipack.trainer.trainer_ridge import TrainerRidge
 
 
