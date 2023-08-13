@@ -1,11 +1,11 @@
 import tqdm
-from RandomFeaturesGenerator import RandomFeaturesGenerator
+from didipack.create_rf.RandomFeaturesGenerator import RandomFeaturesGenerator
 import os
 import sys
 import pandas as pd
 import pickle
 import numpy as np
-from aux import TicToc, get_block_sizes
+from didipack.create_rf.aux import TicToc, get_block_sizes
 
 def generate_random_features_in_blocks(
         x_mat: np.ndarray,
@@ -37,15 +37,20 @@ def generate_random_features_in_blocks(
     The next two parameters concerns paralelization in a server
     :param para_nb_of_list_group: if none, we run the full list of block in one go. Otherwise, we split the list in para_nb_of_list_group chunks that can be run in paralel.
     :param para_id: if para_nb_of_list_group is not none, this will define which of the group of the block list should be run. You should iterate over all of this to run the full P.
-    
+
     :param redo_already_computed_block: if false, we only run the batch if it wasn't already save.
     :return: None
     '''
+
+    # To run all the blocks and have the correct number of features add the end, we need to add one block size generation here to the total number of features we aim for
+    # see line to_run = np.arange(0,len(blocks)-1,1) and the -1 to understand why
+    # nb_of_random_features_total += block_size_for_generation
+
     tictoc = TicToc()
     blocks = get_block_sizes(nb_of_random_features_total, block_size_for_generation, voc_grid=voc_grid)
     os.makedirs(save_dir, exist_ok=True)
     # the list of all individual blocks to run
-    to_run = np.arange(0,len(blocks) - 1,1)
+    to_run = np.arange(0,len(blocks)-1,1)
     if para_nb_of_list_group is not None:
         # we will split the loop into max(para_grid+1) chunks, and run the para_id th one
         to_run = np.array_split(to_run, para_nb_of_list_group)[para_id]
@@ -64,6 +69,7 @@ def generate_random_features_in_blocks(
         )
         rf_factors_all.append(rf_factors)
 
+
     rf_factors = pd.concat(rf_factors_all, axis=1)
     if save_results:
         if para_id is not None:
@@ -74,40 +80,40 @@ def generate_random_features_in_blocks(
             tictoc.toc("Finished and saved")
 
     return rf_factors
-
-
-def generate_random_features_in_blocks_if_not_already_ran(
-        x_mat: np.ndarray,
-        y_mat: np.ndarray,
-        date_ids: np.ndarray,
-        nb_of_random_features_total: int,
-        block_size_for_generation: int,
-        save_dir: str,
-        random_features_generator: RandomFeaturesGenerator,
-        start_seed: int =0,
-        voc_grid: list = None,
-        para_nb_of_list_group:int = None,
-        para_id: None = int,
-        save_results = True
-):
-    # correcting for the missing chunk
-    nb_of_random_features_total += block_size_for_generation
-
-    if os.path.exists(save_dir + f'rf_chunk_{para_id}.p'):
-        print(f'ALREADY RAN, skip that one {para_id}',flush=True)
-    else:
-        print(f'Start running {para_id}',flush=True)
-        generate_random_features_in_blocks(
-            x_mat = x_mat,
-            y_mat = y_mat,
-            date_ids = date_ids,
-            nb_of_random_features_total = nb_of_random_features_total,
-            block_size_for_generation = block_size_for_generation,
-            save_dir = save_dir,
-            random_features_generator = random_features_generator,
-            start_seed = start_seed,
-            voc_grid = voc_grid,
-            para_nb_of_list_group = para_nb_of_list_group,
-            para_id = para_id,
-            save_results=save_results
-        )
+#
+#
+# def generate_random_features_in_blocks_if_not_already_ran(
+#         x_mat: np.ndarray,
+#         y_mat: np.ndarray,
+#         date_ids: np.ndarray,
+#         nb_of_random_features_total: int,
+#         block_size_for_generation: int,
+#         save_dir: str,
+#         random_features_generator: RandomFeaturesGenerator,
+#         start_seed: int =0,
+#         voc_grid: list = None,
+#         para_nb_of_list_group:int = None,
+#         para_id: None = int,
+#         save_results = True
+# ):
+#     # correcting for the missing chunk
+#     nb_of_random_features_total += block_size_for_generation
+#
+#     if os.path.exists(save_dir + f'rf_chunk_{para_id}.p'):
+#         print(f'ALREADY RAN, skip that one {para_id}',flush=True)
+#     else:
+#         print(f'Start running {para_id}',flush=True)
+#         generate_random_features_in_blocks(
+#             x_mat = x_mat,
+#             y_mat = y_mat,
+#             date_ids = date_ids,
+#             nb_of_random_features_total = nb_of_random_features_total,
+#             block_size_for_generation = block_size_for_generation,
+#             save_dir = save_dir,
+#             random_features_generator = random_features_generator,
+#             start_seed = start_seed,
+#             voc_grid = voc_grid,
+#             para_nb_of_list_group = para_nb_of_list_group,
+#             para_id = para_id,
+#             save_results=save_results
+#         )

@@ -32,29 +32,47 @@ JKP_signals = ['cowc_gr1a', 'oaccruals_at', 'oaccruals_ni', 'taccruals_at', 'tac
 
 future_return_column_name = 'ret_exc_lead1m'
 
-def pre_process_raw_signals_130(base_folder, save_dir=None, start_date ='19630101', end_date ='20191231'):
+def pre_process_raw_signals_130(base_folder, save_dir=None, start_date ='19630101', end_date ='20191231',tolerance_for_nan_in_one_row =0.3,max_nb_of_predictor=130):
+
+    # load the data
     JKP_filename = os.path.join(base_folder, 'usa_factor_data.csv')
+    # prepare the target directory to save the resulting folder
     if save_dir is None:
         save_dir = base_folder + '/130_signal/'
     os.makedirs(save_dir, exist_ok=True)
+
+    # select the columns of interest
     id_col = ['id', 'eom', 'size_grp']
     cols_read = id_col + JKP_signals + [future_return_column_name]
+
+    # load the csv
     df = pd.read_csv(JKP_filename, usecols=cols_read, parse_dates=['eom'])
+
+    # drop nano
     df = df.loc[df['size_grp'] != 'nano', :]
+
+    # drop low and upper date
     ind = (df['eom'] >= pd.to_datetime(start_date)) & (df['eom'] <= pd.to_datetime(end_date))
     df = df.loc[ind, :].reset_index(drop=True)
-    all = pd.isna(df[JKP_signals]).mean()
-    all.name = 'all'
-    df = df.loc[~pd.isna(df[future_return_column_name]), :]
-    keep_col = list(pd.isna(df[JKP_signals]).mean().sort_values().head(130).index)
-    df = df.loc[:, id_col + keep_col + [future_return_column_name]]
-    tr = 0.3
-    ind = pd.isna(df[keep_col]).mean(1) <= tr
+
+    if max_nb_of_predictor > 0:
+        # check missing values across the full sample
+        # and keep only max_nb_of_predictor with fewer number of missing values
+        all = pd.isna(df[JKP_signals]).mean()
+        all.name = 'all'
+        df = df.loc[~pd.isna(df[future_return_column_name]), :]
+        keep_col = list(pd.isna(df[JKP_signals]).mean().sort_values().head(max_nb_of_predictor).index)
+        df = df.loc[:, id_col + keep_col + [future_return_column_name]]
+
+    # drop the rows with more than tolerance_for_nan_in_one_row o Nan
+    ind = pd.isna(df[keep_col]).mean(1) <= tolerance_for_nan_in_one_row
     df = df.loc[ind, :].reset_index(drop=True)
     df = df.rename(columns={'eom': 'date'})
-    # print(df.groupby(['date','size_grp']).count().reset_index().groupby('date').mean())
+
+    # save per size group in pickle to faciltate
     for size in df['size_grp'].unique():
         df.loc[df['size_grp'] == size, :].drop(columns='size_grp').to_pickle(save_dir + size + '.p')
 
 if __name__ == '__main__':
+    # example of one of the pre-processing
     pre_process_raw_signals_130(base_folder='work/PRTNR/EPFL/CDM/smalamud/complexmodels/virtualcomplexityeverywhere_data/')

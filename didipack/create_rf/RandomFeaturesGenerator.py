@@ -3,10 +3,6 @@ import pandas as pd
 import numpy as np
 from typing import Optional, Tuple
 import time
-
-
-
-
 class RandomFeaturesSpecs:
     def __init__(
             self,
@@ -37,10 +33,6 @@ class RandomFeaturesSpecs:
         self.binning_feature = binning_feature
         self.random_rotation = random_rotation
         self.ranking = ranking
-
-
-
-
 
 
 class RandomFeaturesGenerator:
@@ -181,14 +173,12 @@ class RandomFeaturesGenerator:
                 )
             )
         random_features_for_generation = np.concatenate(random_features_for_generation,axis=1)
-
         if self.build_factors:
             # note that we update the dates according to the groupby so that we can get the updated dates as output
             random_features_for_generation = self._build_random_factors(x_mat=random_features_for_generation, y_mat=y_mat, dates_ids=date_ids)
         else:
             random_features_for_generation = pd.DataFrame(random_features_for_generation,index=date_ids.flatten())
         random_features_for_generation.index.name = 'date'
-
 
         if permute_randomly:
             perm = np.random.permutation(random_features_for_generation.shape[1])
@@ -320,7 +310,6 @@ class RandomFeaturesGenerator:
             random_features_for_spec = self._generate_random_binning_features(x_mat=x_mat, spec=spec, seed=seed)
         else:
             random_features_for_spec = self.generate_random_neuron_features(x_mat=x_mat, spec=spec,seed=seed)
-
         if spec.ranking:
             random_features_for_spec = self._rank_features_cross_sectionally(
                 unkranked_x= random_features_for_spec,

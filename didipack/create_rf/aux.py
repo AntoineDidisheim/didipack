@@ -17,7 +17,14 @@ class TicToc:  # simple class to measure the time of various part of the code
 def get_block_sizes(
         number_random_features: int, small_subset_size: int, voc_grid: list = None
 ) -> list:
-    """returns a list of block sizes"""
+    """returns a list of block sizes
+
+    We wish to produce a grid of block that will be used to generate the random features in chunks.
+
+    The largest size will be small_subset_size. In addittion, we will include all points in the voc_grid.
+
+    """
+
     block_sizes = (
         np.arange(0, number_random_features, small_subset_size).astype(int).tolist()
     )
