@@ -37,8 +37,7 @@ class PandasPlus:
         '''
         return s.dt.year*100 + s.dt.month
 
-    import pandas as pd
-
+    @staticmethod
     def get_yw(s: pd.Series) -> pd.Series:
         '''
         Get unique year-week identifier from a datetime pandas Series.
@@ -46,7 +45,7 @@ class PandasPlus:
         :param s: A datetime-like pandas Series
         :return: A Series with unique year-week identifiers
         '''
-        return s.dt.year * 100 + s.dt.week
+        return s.dt.year * 100 + s.dt.isocalendar().week
 
     @staticmethod
     def weighted_sum_pandas_series(w: pd.Series, target: pd.Series, gb: pd.Series):

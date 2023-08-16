@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name='didipack',
     packages=setuptools.find_packages(),  # Automatically discover and include all packages in the package directory
-    version='4.0.6',
+    version='4.0.7',
     license='MIT',
     setup_requires=['wheel'],
     description='Usefull time saver for data-science and finance with python',
@@ -18,7 +18,8 @@ setuptools.setup(
         'statsmodels',
         'matplotlib',
         'jinja2',
-        'tqdm'
+        'tqdm',
+        'scikit-learn'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
