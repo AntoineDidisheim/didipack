@@ -42,7 +42,7 @@ def parse():
         third_pos = positional_args[2]
 
     # Combine positional and named arguments in one dictionary
-    all_args = {'first': first_pos, 'second': second_pos, 'third': third_pos}
+    all_args = {'a': first_pos, 'b': second_pos, 'c': third_pos}
     all_args.update(named_args)
 
     # Create an arguemnt to output
