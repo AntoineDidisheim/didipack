@@ -11,7 +11,7 @@ class Argument(pd.Series):
     def __getattr__(self, name: str):
         return self.get_value(name)
 
-def didi_parse():
+def parse():
     # Default values for positional arguments
     first_pos = 0
     second_pos = 0
@@ -51,4 +51,4 @@ def didi_parse():
     return args
 
 if __name__ == "__main__":
-    result = didi_parse()
+    result = parse()
