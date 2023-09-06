@@ -6,6 +6,7 @@ from didipack.plot_function import *
 from .utils_didi.pandasplus import PandasPlus
 from .utils_didi.plot import PlotPlus
 from .utils_didi.general import General
+from .utils_didi.parser import didi_parse
 from .create_rf.RandomFeaturesGenerator import RandomFeaturesGenerator,RandomFeaturesSpecs
 from .create_rf.gen_rf_factors import generate_random_features_in_blocks,get_block_sizes
 from .utils_didi.ols import OlsPLus
