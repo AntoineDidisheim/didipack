@@ -1,6 +1,15 @@
 import sys
 import pandas as pd
 
+def convert_to_int(value):
+    if isinstance(value, int):
+        return value
+    elif isinstance(value, str):
+        if value.isdigit():
+            return int(value)
+    return value
+
+
 class Argument(pd.Series):
     def get_value(self, v: str):
         if v in self.index:
@@ -29,17 +38,17 @@ def parse():
         if arg.startswith('--'):
             # Remove leading '--' and split at the '=' to get key and value
             key, value = arg[2:].split('=')
-            named_args[key] = value
+            named_args[key] = convert_to_int(value)
         else:
             positional_args.append(arg)
 
     # Fill in positional arguments if they exist
     if len(positional_args) >= 1:
-        first_pos = positional_args[0]
+        first_pos = convert_to_int(positional_args[0])
     if len(positional_args) >= 2:
-        second_pos = positional_args[1]
+        second_pos = convert_to_int(positional_args[1])
     if len(positional_args) >= 3:
-        third_pos = positional_args[2]
+        third_pos = convert_to_int(positional_args[2])
 
     # Combine positional and named arguments in one dictionary
     all_args = {'a': first_pos, 'b': second_pos, 'c': third_pos}
