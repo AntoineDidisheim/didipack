@@ -39,14 +39,14 @@ def get_start_dates(dates: pd.Series, T_train, testing_window) -> List:
 
     Args:
         dates (pd.Series): A series containing the dates for the data.
-        T_train (int): The length of the training period.
+        T_train (int): The length of the training period.  IF T_TRAIN is NEGATIVE, we have an expanding window, minimum value T_Train
         testing_window (int): The length of the testing period.
 
     Returns:
         List[int]: A list containing the start dates for training.
     """
 
-    start_dates = [dates.min() + T_train]
+    start_dates = [dates.min() + np.abs(T_train)]
     while max(start_dates) < max(dates):
         start_dates.append(max(start_dates) + testing_window)
 
