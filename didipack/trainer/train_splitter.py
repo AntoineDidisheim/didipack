@@ -6,7 +6,7 @@ import tqdm
 from didipack.parameters import *
 from matplotlib import pyplot as plt
 from typing import Tuple, List
-from didipack.utils_didi.general import smart_chunks
+from didipack.utils_didi.general import General
 from didipack.trainer.trainer_ridge import TrainerRidge
 
 
@@ -97,7 +97,7 @@ def get_tasks_for_current_node(chunks_still_to_process: List[Tuple[str, np.ndarr
     """
     to_run_across_nodes = np.array_split(chunks_still_to_process, nb_nodes_total)
     if max([len(x) for x in to_run_across_nodes]):
-        to_run_across_nodes = list(smart_chunks(chunks_still_to_process, min_nb_chunks_in_cluster))
+        to_run_across_nodes = list(General.smart_chunks(chunks_still_to_process, min_nb_chunks_in_cluster))
         print(f'Splitting in a smart way {[len(x) for x in to_run_across_nodes]}')
     # [len(x) for x in to_run_across_nodes]
     to_run_now = to_run_across_nodes[grid_id]
