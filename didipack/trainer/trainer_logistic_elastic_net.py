@@ -7,6 +7,7 @@ from didipack import Params
 from sklearn.linear_model import LogisticRegression
 
 
+
 class TrainerLogisticElasticNet(BaseTrainer):
     def __init__(self, par: Params):
         super().__init__(par)
@@ -37,10 +38,12 @@ class TrainerLogisticElasticNet(BaseTrainer):
         for l1_ratio in list_of_l1_ratio:
             for shrinkage in self.par.train.shrinkage_list:
                 hyp = {'shrinkage':[shrinkage],'l1_ratio':[l1_ratio]}
+                print('Just before the analysis',flush=True)
                 self._train_model(x=x_train,y=y_train,hyper_params=hyp)
                 perf[k] = self.m.score(X=x_val,y=y_val)
                 comb[k]=hyp
                 k+=1
+                print('Ran One analysis',k,flush=True)
 
         best_hype = comb[pd.Series(perf).idxmax()]
         print('Select best hype', best_hype,flush=True)

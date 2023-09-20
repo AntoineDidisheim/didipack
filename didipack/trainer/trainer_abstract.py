@@ -43,7 +43,7 @@ class BaseTrainer(ABC):
             -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
         if self.par.train.T_train < 0:
-            start_train = t_index - self.par.train.T_train
+            start_train = times.min()
         else:
             start_train = t_index - self.par.train.T_train
 
@@ -54,9 +54,6 @@ class BaseTrainer(ABC):
         x_train, y_train = self._split_and_index(x, y, ids, times, start_train, end_train)
         x_val, y_val = self._split_and_index(x, y, ids, times, end_train, t_index)
         x_test, y_test = self._split_and_index(x, y, ids, times, t_index, end_test)
-
-
-
         return x_train, y_train, x_val, y_val, x_test, y_test
 
     def _train_model_and_predict(self, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: pd.DataFrame,
@@ -84,6 +81,8 @@ class BaseTrainer(ABC):
     def _train_model(self, x: pd.DataFrame, y: pd.DataFrame, hyper_params: dict):
         if self.verbose:
             print('Model trained', flush=True)
+
+
 
 
 if __name__ == "__main__":
