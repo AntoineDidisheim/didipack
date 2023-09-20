@@ -6,8 +6,11 @@ import numpy as np
 from didipack import Params
 from sklearn.linear_model import LogisticRegression
 
+class CustomMeta(type):
+    def __repr__(cls):
+        return "LogisticElasticNet"
 
-class TrainerLogisticElasticNet(BaseTrainer):
+class TrainerLogisticElasticNet(BaseTrainer,metaclass=CustomMeta):
     def __init__(self, par: Params):
         super().__init__(par)
         self.m = None
