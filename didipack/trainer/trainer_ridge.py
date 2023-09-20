@@ -5,11 +5,7 @@ from didipack.utils_didi.ridge import run_efficient_ridge
 import numpy as np
 from didipack import Params
 
-class CustomMeta(type):
-    def __repr__(cls):
-        return "RidgeRegr"
-
-class TrainerRidge(BaseTrainer,metaclass=CustomMeta):
+class TrainerRidge(BaseTrainer):
     def __init__(self, par: Params):
         super().__init__(par)
         self.beta = None
