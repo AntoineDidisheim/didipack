@@ -11,6 +11,7 @@ class TrainerLogisticElasticNet(BaseTrainer):
     def __init__(self, par: Params):
         super().__init__(par)
         self.m = None
+        self.par = par
 
 
     def _predict(self, x):
@@ -25,7 +26,7 @@ class TrainerLogisticElasticNet(BaseTrainer):
 
         # if no grid is defiend, default is 0.5
         try:
-            list_of_l1_ratio= par.train.l1_ratio
+            list_of_l1_ratio= self.par.train.l1_ratio
         except:
             list_of_l1_ratio = [0.5]
 
@@ -34,7 +35,7 @@ class TrainerLogisticElasticNet(BaseTrainer):
 
         k=0
         for l1_ratio in list_of_l1_ratio:
-            for shrinkage in par.train.shrinkage_list:
+            for shrinkage in self.par.train.shrinkage_list:
                 hyp = {'shrinkage':[shrinkage],'l1_ratio':[l1_ratio]}
                 self._train_model(x=x_train,y=y_train,hyper_params=hyp)
                 perf[k] = self.m.score(X=x_val,y=y_val)
