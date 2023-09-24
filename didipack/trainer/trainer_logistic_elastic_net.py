@@ -19,7 +19,7 @@ class TrainerLogisticElasticNet(BaseTrainer):
         return self.m.predict(x)
 
     def _train_model(self, x: pd.DataFrame, y: pd.DataFrame, hyper_params):
-        self.m = LogisticRegression(C=hyper_params['shrinkage'][0], penalty='elasticnet', l1_ratio=hyper_params['l1_ratio'][0], solver='saga', fit_intercept=True)
+        self.m = LogisticRegression(C=hyper_params['shrinkage'][0], penalty='elasticnet', l1_ratio=hyper_params['l1_ratio'][0], solver='saga', fit_intercept=True, n_jobs=-1)
         self.m.fit(x,y)
 
     def _validation_procedure(self, x_train: pd.DataFrame, y_train: pd.DataFrame, x_val: pd.DataFrame,
