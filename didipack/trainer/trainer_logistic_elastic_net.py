@@ -9,17 +9,18 @@ from sklearn.linear_model import LogisticRegression
 
 
 class TrainerLogisticElasticNet(BaseTrainer):
-    def __init__(self, par: Params):
+    def __init__(self, par: Params, para=None):
         super().__init__(par)
         self.m = None
         self.par = par
+        self.para = para
 
 
     def _predict(self, x):
         return self.m.predict_proba(x)
 
     def _train_model(self, x: pd.DataFrame, y: pd.DataFrame, hyper_params):
-        self.m = LogisticRegression(C=hyper_params['shrinkage'][0], penalty='elasticnet', l1_ratio=hyper_params['l1_ratio'][0], solver='saga', fit_intercept=True, n_jobs=-1)
+        self.m = LogisticRegression(C=hyper_params['shrinkage'][0], penalty='elasticnet', l1_ratio=hyper_params['l1_ratio'][0], solver='saga', fit_intercept=True, n_jobs=self.para)
         self.m.fit(x,y)
 
     def _validation_procedure(self, x_train: pd.DataFrame, y_train: pd.DataFrame, x_val: pd.DataFrame,

@@ -9,7 +9,7 @@ class TrainerRidge(BaseTrainer):
     def __init__(self, par: Params):
         super().__init__(par)
         self.beta = None
-
+        self.para = para
     def _predict(self, x):
         return x.values @ self.beta.T
 
