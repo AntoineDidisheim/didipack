@@ -8,7 +8,10 @@ class OlsPLus:
         pass
 
     def sm_with_fixed_effect(self,df,y,x,fix_effect_cols=[], std_error_cluster=None):
-        temp = df[[y]+x+fix_effect_cols].copy().dropna()
+        if (std_error_cluster is None) | (std_error_cluster in x):
+            temp = df[[y]+x+fix_effect_cols].copy().dropna()
+        else:
+            temp = df[[y]+x+fix_effect_cols+[std_error_cluster]].copy().dropna()
         temp['y_untr'] = temp[y]
         t = 0
         if len(fix_effect_cols)>0:
