@@ -64,10 +64,14 @@ class OneReg:
         self.blocks = blocks
         self.bottom_block = bottom_blocks
 
-    def create_columns(self):
+    def create_columns(self, show_list=None, summary_block_common=None):
+        if show_list is None:
+            show_list = self.show_list
+        if summary_block_common is None:
+            summary_block_common = self.create_summary_blocks().keys()
         # first add the parameters of the reg
         d = pd.Series(dtype=object)
-        for k in self.show_list:
+        for k in show_list:
             if k in self.reg.params.keys():
                 v = self.reg.pvalues[k]
                 p = f'{np.round(self.reg.params[k], TableReg.round):,}'
@@ -111,14 +115,8 @@ class OneReg:
                 t[''] = TableReg.missing_symbol
                 d = pd.concat([d, t], axis=0)
 
-        # now we can add the "blocks", that is fix effects and others
-        summary_block = {}
-        if TableReg.show_obs:
-            summary_block['Observations'] = f'{int(self.reg.nobs):,}'
-        if TableReg.show_r2:
-            summary_block.update({k: np.round(v, TableReg.round_r2) for k, v in self.reg.rsqured_values.items()})
-
-        all_blocks = self.blocks + [summary_block] + self.bottom_block
+        summary_block = self.create_summary_blocks()
+        all_blocks = self.blocks + [{k: summary_block.get(k, "") for k in summary_block_common}] + self.bottom_block
 
         for block in all_blocks:
             t = pd.Series(dtype=object)
@@ -127,7 +125,16 @@ class OneReg:
             for k in block.keys():
                 t[k] = block[k]
             d = pd.concat([d, t], axis=0)
+
         return d
+
+    def create_summary_blocks(self):
+        summary_block = {}
+        if TableReg.show_obs:
+            summary_block['Observations'] = f'{int(self.reg.nobs):,}'
+        if TableReg.show_r2:
+            summary_block.update({k: np.round(v, TableReg.round_r2) for k, v in self.reg.rsqured_values.items()})
+        return summary_block
 
 
 class TableReg:
@@ -185,23 +192,24 @@ class TableReg:
         self.reg_list.append(OneReg(reg, show_list, hide_list, blocks, bottom_blocks))
 
     def update_show_list(self):
+        # Generate common regression parameters
         if len(self.show_only_list) == 0:
-            show_list = []
-            for oneReg in self.reg_list:
-                show_list = list(set(show_list + oneReg.show_list))
-            show_list = list(np.sort(show_list))
+            show_list = sorted(set(item for reg in self.reg_list for item in reg.show_list))
             show_list = self.order + [x for x in show_list if x not in self.order]
         else:
             show_list = self.show_only_list
 
-        col = []
+        # Generate common summary block sections
+        summary_block_common = list(dict.fromkeys([item for reg in self.reg_list for item in reg.create_summary_blocks()]))
+
+        cols = []
         for oneReg in self.reg_list:
-            oneReg.show_list = show_list
-            col.append(oneReg.create_columns())
+            cols.append(oneReg.create_columns(show_list, summary_block_common))
+
         try:
-            self.df = pd.concat(col, axis=1)
+            self.df = pd.concat(cols, axis=1)
         except ValueError:
-            raise ValueError("Blocks not consistent across all regressions, or mixing of regression packages")
+            raise ValueError("Blocks not consistent across all regressions.")
 
         self.df.columns = [r'\parboxc{c}{0.6cm}{(' + str(int(i + 1)) + ')}' for i in range(self.df.shape[1])]
         self.df = self.df.rename(index=self.rename_dict)
