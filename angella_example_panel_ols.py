@@ -2,6 +2,7 @@ import pandas as pd
 from linearmodels import PanelOLS
 import statsmodels.api as sm
 import numpy as np
+import didipack as didi
 
 # Example data
 np.random.seed(0)
@@ -35,3 +36,9 @@ results = model.fit()
 
 print("\nStatsmodels OLS Results:")
 print(results.summary())
+
+table_2 = didi.TableReg()
+table_2.add_reg(panel_ols_res)
+table_2.add_reg(results)
+table_2.add_reg(panel_ols_res)
+table_2.save_tex('tex_example/panel.tex')
