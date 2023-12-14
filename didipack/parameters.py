@@ -48,13 +48,14 @@ class Params:
 
         print('----', flush=True)
 
-    def update_param_grid(self, grid_list, id_comb):
+    def update_param_grid(self, grid_list, id_comb,verbose =True):
         ind = []
         for l in grid_list:
             t = np.arange(0, len(l[2]))
             ind.append(t.tolist())
         combs = list(itertools.product(*ind))
-        print('comb', str(id_comb + 1), '/', str(len(combs)))
+        if verbose:
+            print('comb', str(id_comb + 1), '/', str(len(combs)))
         c = combs[id_comb]
 
         for i, l in enumerate(grid_list):
